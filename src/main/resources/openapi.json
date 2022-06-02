@@ -183,25 +183,17 @@
           }
         }
       },
-      "ExceptionResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
       "ResponseWalletDto": {
         "type": "object",
         "properties": {
           "data": {
             "$ref": "#/components/schemas/WalletDto"
           },
-          "exceptionResponse": {
-            "$ref": "#/components/schemas/ExceptionResponse"
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
           }
         }
       },
@@ -306,8 +298,11 @@
           "data": {
             "$ref": "#/components/schemas/TransactionDto"
           },
-          "exceptionResponse": {
-            "$ref": "#/components/schemas/ExceptionResponse"
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
           }
         }
       },
