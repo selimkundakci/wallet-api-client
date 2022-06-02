@@ -1,0 +1,338 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/v1/wallet": {
+      "post": {
+        "tags": [
+          "wallet-controller"
+        ],
+        "operationId": "createWallet",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWalletRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWalletDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/wallet/account": {
+      "post": {
+        "tags": [
+          "wallet-controller"
+        ],
+        "operationId": "createWalletAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWalletAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWalletDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/topup": {
+      "post": {
+        "tags": [
+          "top-up-controller"
+        ],
+        "operationId": "topUp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopUpRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTransactionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/checkout": {
+      "post": {
+        "tags": [
+          "checkout-controller"
+        ],
+        "operationId": "checkout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseTransactionDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/wallet/{userId}": {
+      "get": {
+        "tags": [
+          "wallet-controller"
+        ],
+        "operationId": "queryWallet",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseWalletDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateWalletRequest": {
+        "type": "object",
+        "properties": {
+          "phoneNumber": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "TRY",
+              "USD",
+              "EUR"
+            ]
+          }
+        }
+      },
+      "ExceptionResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ResponseWalletDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/WalletDto"
+          },
+          "exceptionResponse": {
+            "$ref": "#/components/schemas/ExceptionResponse"
+          }
+        }
+      },
+      "TransactionDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "transactionType": {
+            "type": "string",
+            "enum": [
+              "CHECKOUT",
+              "TOP_UP",
+              "WITHDRAW",
+              "REFUND",
+              "REWARD",
+              "CANCEL_REWARD"
+            ]
+          },
+          "referenceCode": {
+            "type": "string"
+          }
+        }
+      },
+      "WalletAccountDto": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "TRY",
+              "USD",
+              "EUR"
+            ]
+          },
+          "transactionDtos": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionDto"
+            }
+          }
+        }
+      },
+      "WalletDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "walletAccountDtos": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WalletAccountDto"
+            }
+          }
+        }
+      },
+      "CreateWalletAccountRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "TRY",
+              "USD",
+              "EUR"
+            ]
+          }
+        }
+      },
+      "TopUpRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "TRY",
+              "USD",
+              "EUR"
+            ]
+          }
+        }
+      },
+      "ResponseTransactionDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/TransactionDto"
+          },
+          "exceptionResponse": {
+            "$ref": "#/components/schemas/ExceptionResponse"
+          }
+        }
+      },
+      "CheckoutRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "referenceId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "TRY",
+              "USD",
+              "EUR"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
